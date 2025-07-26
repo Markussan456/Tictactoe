@@ -1,6 +1,30 @@
 const gameboard = (()=>{
+let label = document.getElementById("winorlose");
+const squares = [];
+
+const domboard = () => {
+let kont = document.getElementById("contiks");
+for(let i = 0;i <9;i++){
+let square = document.createElement("div");
+square.classList.add("squares");
+square.id = `square-${i}`;
+
+kont.appendChild(square);
+squares.push(square);
+square.addEventListener("click",()=>{
+    if (gamended) return;
+playerchoice(i);
+if(gamended) return;
+computerchoice();
+if(gamended) return;
+console.clear();
+showboard();
+});
+}
 
 
+
+};
 
 
 let gameboard = ["-","-","-",
@@ -33,7 +57,7 @@ const showboard = ()=>{
 
 
 const changesymbol = (index,symbol)=>{
-gameboard[index] = symbol;
+squares[index].textContent = symbol;
 if(symbol == "x"){
     gameboardcheckz[index] = true;
 }else if (symbol == "o"){
@@ -45,11 +69,11 @@ checkwin();
 
 
 
-const playerchoice = ()=>{
+const playerchoice = (indexo)=>{
     console.clear();
     showboard();
     if(!gameboardcheckz.includes(null)) return; //Checks if board isnt full 
-const indexo = prompt("Where do you want to put the X?")
+
 if(gameboardcheckz[indexo] == null){
 changesymbol(indexo,"x");
 }else if (gameboardcheckz[indexo] !== null){
@@ -77,27 +101,30 @@ if(gameboardcheckz[randnum] == null){
 
 const checkwin = ()=>{
 for (let [a,b,c] of winningcombos){
-if(gameboard[a] === gameboard[b]&&
-    gameboard[b] == gameboard[c]&&
-    gameboard[a] !== "-"){
+if(squares[a].textContent === squares[b].textContent&&
+    squares[b].textContent == squares[c].textContent&&
+    squares[a].textContent !== ""){
         gamended = true;
         console.clear();
         showboard();
-         console.log("And the winner is -> " + gameboard[a]);
+        
+         label.textContent ="And the winner is -> " + squares[a].textContent;
          return;
     }
 };
-if(!gameboard.includes == "-"){
-    console.log("DRAW!")
+if(!gameboardcheckz.includes(null)){
+    label.textContent = "DRAW!";
     gamended = true;
 }
 };
 
 const restart = ()=>{
-gameboard = ["-","-","-",
-                 "-","-","-",
-                 "-","-","-"];
+for(i of squares){
+    i.textContent ="";
 
+}
+
+label.textContent = "";
 gameboardcheckz = [null,null,null,null,null,null,null,null,null,];
 gamended = false;
 playround();
@@ -114,7 +141,7 @@ showboard();
     
 
 };
-
+domboard();
 return {
 playround,restart
 
@@ -128,11 +155,7 @@ playround,restart
 
 })();
 let againbtn = document.getElementById("playagbtn");
-let playbtn = document.getElementById("playbtn");
-playbtn.addEventListener("click",()=>{
-gameboard.playround();
 
-});
 againbtn.addEventListener("click",()=>{
 gameboard.restart();
 });
