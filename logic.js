@@ -1,3 +1,6 @@
+
+
+
 const gameboard = (()=>{
 let label = document.getElementById("winorlose");
 
